@@ -1,0 +1,18 @@
+{
+  "name": "Stub — Receipt & Warranty Tracker",
+  "short_name": "Stub",
+  "description": "Track every purchase and its warranty in one place.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F2F1EA",
+  "theme_color": "#F2F1EA",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

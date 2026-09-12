@@ -1,0 +1,531 @@
+/* ---------------------------------------------------------------
+   Design tokens
+   Paper-and-ink palette pulled from the subject matter itself: a
+   receipt stub. Serif for anything you'd read (product names,
+   headings), monospace for anything you'd tally (prices, dates,
+   status), the way a thermal receipt actually prints.
+------------------------------------------------------------------ */
+:root {
+  --paper: #f2f1ea;
+  --paper-raised: #fbfaf6;
+  --ink: #20342c;
+  --ink-soft: #4c5c54;
+  --ink-faint: #8b968f;
+  --line: #d8d5c8;
+
+  --accent: #20342c;
+  --accent-contrast: #f2f1ea;
+
+  --active: #2f6f5e;
+  --active-bg: #e3ede8;
+  --expiring: #9a6a10;
+  --expiring-bg: #f5ead2;
+  --expired: #a2453a;
+  --expired-bg: #f3e0dc;
+
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-mono: 'IBM Plex Mono', 'SFMono-Regular', Menlo, monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --radius: 4px;
+  --shadow-card: 0 1px 0 var(--line);
+  --max-width: 560px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+#root {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  font-family: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------
+   App shell
+------------------------------------------------------------------ */
+.app {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding-bottom: 96px; /* clears the fixed add-button */
+}
+
+/* ---------------------------------------------------------------
+   Header
+------------------------------------------------------------------ */
+.header {
+  padding: 28px 20px 18px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.header__title {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--ink);
+}
+
+.header__subtitle {
+  margin: 6px 0 0;
+  font-size: 13px;
+  font-family: var(--font-mono);
+  color: var(--ink-soft);
+}
+
+/* ---------------------------------------------------------------
+   Search bar
+------------------------------------------------------------------ */
+.search-bar {
+  padding: 16px 20px 4px;
+}
+
+.search-bar__input-wrap {
+  position: relative;
+}
+
+.search-bar__input {
+  width: 100%;
+  padding: 11px 14px 11px 38px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+  font-size: 15px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+.search-bar__input::placeholder {
+  color: var(--ink-faint);
+}
+
+.search-bar__icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-faint);
+  pointer-events: none;
+}
+
+/* ---------------------------------------------------------------
+   Purchase list
+------------------------------------------------------------------ */
+.purchase-list {
+  padding: 12px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+.empty-state {
+  margin-top: 40px;
+  text-align: center;
+  padding: 32px 20px;
+  color: var(--ink-soft);
+}
+
+.empty-state__title {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+
+.empty-state__body {
+  font-size: 14px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------
+   Purchase card — styled like a receipt stub, with a perforated
+   top edge. This is the one place the design takes a visual risk;
+   everything else stays quiet.
+------------------------------------------------------------------ */
+.purchase-card {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 16px 14px;
+  position: relative;
+  box-shadow: var(--shadow-card);
+}
+
+.purchase-card::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background-image: radial-gradient(circle, var(--paper) 1.5px, transparent 1.6px);
+  background-size: 10px 3px;
+  background-repeat: repeat-x;
+}
+
+.purchase-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.purchase-card__name {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 500;
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.3;
+}
+
+.purchase-card__store {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin: 2px 0 0;
+}
+
+.purchase-card__price {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.purchase-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.purchase-card__meta-item span {
+  color: var(--ink-faint);
+}
+
+.purchase-card__note {
+  margin: 10px 0 0;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  line-height: 1.45;
+  border-left: 2px solid var(--line);
+  padding-left: 10px;
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-pill::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status-pill--active {
+  background: var(--active-bg);
+  color: var(--active);
+}
+
+.status-pill--expiring-soon {
+  background: var(--expiring-bg);
+  color: var(--expiring);
+}
+
+.status-pill--expired {
+  background: var(--expired-bg);
+  color: var(--expired);
+}
+
+.purchase-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line);
+}
+
+.purchase-card__expiry {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.purchase-card__expiry strong {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.purchase-card__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-button {
+  border: 1px solid var(--line);
+  background: var(--paper);
+  border-radius: var(--radius);
+  padding: 6px 10px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+
+.icon-button:hover {
+  color: var(--ink);
+  border-color: var(--ink-faint);
+}
+
+.icon-button--danger:hover {
+  color: var(--expired);
+  border-color: var(--expired);
+}
+
+/* ---------------------------------------------------------------
+   Add-purchase button — fixed, thumb-reachable
+------------------------------------------------------------------ */
+.add-button-wrap {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  padding: 14px 20px calc(14px + env(safe-area-inset-bottom));
+  background: linear-gradient(to top, var(--paper) 60%, transparent);
+  pointer-events: none;
+}
+
+.add-button {
+  pointer-events: auto;
+  width: 100%;
+  max-width: calc(var(--max-width) - 40px);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border: none;
+  border-radius: var(--radius);
+  padding: 15px 20px;
+  font-size: 15.5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(32, 52, 44, 0.25);
+}
+
+.add-button:active {
+  transform: translateY(1px);
+}
+
+/* ---------------------------------------------------------------
+   Purchase form (modal sheet)
+------------------------------------------------------------------ */
+.form-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(32, 52, 44, 0.35);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 20;
+}
+
+.form-sheet {
+  width: 100%;
+  max-width: var(--max-width);
+  background: var(--paper);
+  border-radius: 16px 16px 0 0;
+  padding: 20px 20px calc(20px + env(safe-area-inset-bottom));
+  max-height: 92vh;
+  overflow-y: auto;
+  animation: slide-up 0.22s ease-out;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(24px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-sheet {
+    animation: none;
+  }
+}
+
+.form-sheet__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.form-sheet__title {
+  font-family: var(--font-serif);
+  font-size: 21px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.form-sheet__close {
+  border: none;
+  background: none;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--ink-soft);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-field label {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--paper-raised);
+  font-size: 15px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+.form-field textarea {
+  resize: vertical;
+  min-height: 64px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-row .form-field {
+  flex: 1;
+}
+
+.form-field--currency select {
+  padding-right: 6px;
+}
+
+.form-field__error {
+  color: var(--expired);
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.form-field--invalid input,
+.form-field--invalid select {
+  border-color: var(--expired);
+}
+
+.form-preview {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  background: var(--paper-raised);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  margin-bottom: 18px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.button {
+  flex: 1;
+  padding: 13px 16px;
+  border-radius: var(--radius);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.button--primary {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border-color: var(--accent);
+}
+
+.button--secondary {
+  background: transparent;
+  color: var(--ink-soft);
+  border-color: var(--line);
+}
